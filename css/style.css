@@ -7,10 +7,7 @@
 
 body {
     background-color: #f0f0f0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 .login-container {
@@ -66,4 +63,262 @@ body {
 
 .login-box button:hover {
     background-color: #ea6c0a;
+}
+
+/* DASHBOARD */
+.container {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.sidebar {
+    background-color: #1a3a6b;
+    width: 180px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+}
+
+.main-content {
+    flex: 1;
+    padding: 30px;
+    background-color: #f0f0f0;
+    margin-left: 180px;
+}
+
+.sidebar-logo {
+    text-align: center;
+    padding: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.sidebar-logo h2 {
+    color: #f97316;
+    font-size: 22px;
+    line-height: 1.2;
+}
+
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.sidebar nav a {
+    color: white;
+    text-decoration: none;
+    padding: 12px 20px;
+    font-size: 13px;
+    transition: background 0.2s;
+}
+
+.sidebar nav a:hover,
+.sidebar nav a.active {
+    background-color: #f97316;
+}
+
+.main-content {
+    flex: 1;
+    padding: 30px;
+    background-color: #f0f0f0;
+}
+
+.main-content h1 {
+    color: #f97316;
+    margin-bottom: 20px;
+    font-size: 28px;
+}
+
+.tabela-horarios {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.tabela-horarios thead {
+    background-color: #1a3a6b;
+    color: white;
+}
+
+.tabela-horarios th,
+.tabela-horarios td {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 14px;
+}
+
+.tabela-horarios tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.tabela-horarios tbody tr:hover {
+    background-color: #fff3e8;
+}
+
+/* CURSOS */
+.cursos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.curso-card {
+    background-color: #1a3a6b;
+    color: white;
+    text-decoration: none;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80px;
+}
+
+.curso-card:hover {
+    background-color: #f97316;
+}
+
+/* DETALHES DO CURSO */
+.detalhes-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    max-width: 600px;
+}
+
+.detalhes-card h2 {
+    color: #f97316;
+    margin-bottom: 20px;
+    font-size: 22px;
+}
+
+.detalhe-item {
+    display: flex;
+    margin-bottom: 12px;
+    gap: 10px;
+}
+
+.detalhe-label {
+    background-color: #f97316;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 13px;
+    font-weight: bold;
+    min-width: 100px;
+    text-align: center;
+}
+
+.detalhe-valor {
+    background-color: #1a3a6b;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 13px;
+    flex: 1;
+}
+
+.btn-voltar {
+    display: inline-block;
+    margin-top: 20px;
+    color: #1a3a6b;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.btn-voltar:hover {
+    color: #f97316;
+}
+
+/* RESERVA */
+.subtitulo {
+    color: #1a3a6b;
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.reserva-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.input-reserva {
+    flex: 1;
+    padding: 8px 15px;
+    border: 1px solid #1a3a6b;
+    border-radius: 5px;
+    font-size: 13px;
+    outline: none;
+}
+
+.btn-reservar {
+    background-color: #1a3a6b;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.2s;
+}
+
+.btn-reservar:hover {
+    background-color: #f97316;
+}
+
+.msg-sucesso {
+    color: green;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.msg-erro {
+    color: red;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* CADASTROS */
+.cadastro-opcoes {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 400px;
+}
+
+.cadastro-card {
+    background-color: white;
+    color: #1a3a6b;
+    text-decoration: none;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    border: 2px solid #1a3a6b;
+    transition: all 0.2s;
+}
+
+.cadastro-card:hover {
+    background-color: #1a3a6b;
+    color: white;
 }
