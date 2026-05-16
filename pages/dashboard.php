@@ -34,8 +34,12 @@ $resultado = mysqli_query($conexao, $query);
             <nav>
                 <a href="dashboard.php" class="active">Visualizar horários</a>
                 <a href="cursos.php">Meus cursos</a>
+                <?php if ($_SESSION['tipo'] == 2): ?>
                 <a href="reserva.php">Reservar Salas</a>
+                <?php endif; ?>
+                <?php if ($_SESSION['tipo'] == 2): ?>
                 <a href="cadastro.php">Cadastros</a>
+                <?php endif; ?>
                 <a href="../includes/logout.php">Sair</a>
             </nav>
         </div>

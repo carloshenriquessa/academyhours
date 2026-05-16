@@ -7,6 +7,12 @@ if (!isset($_SESSION['usuario'])) {
     exit;
 }
 
+// Restrição de acesso - apenas admin
+if ($_SESSION['tipo'] != 2) {
+    header('Location: dashboard.php');
+    exit;
+}
+
 $salas = [
     ['id' => 1, 'nome' => 'Anfiteatro I'],
     ['id' => 2, 'nome' => 'Anfiteatro II'],
@@ -35,8 +41,12 @@ $salas = [
             <nav>
                 <a href="dashboard.php">Visualizar horários</a>
                 <a href="cursos.php">Meus cursos</a>
+                <?php if ($_SESSION['tipo'] == 2): ?>
                 <a href="reserva.php" class="active">Reservar Salas</a>
+                <?php endif; ?>
+                <?php if ($_SESSION['tipo'] == 2): ?>
                 <a href="cadastro.php">Cadastros</a>
+                <?php endif; ?>
                 <a href="../includes/logout.php">Sair</a>
             </nav>
         </div>

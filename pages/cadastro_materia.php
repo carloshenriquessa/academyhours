@@ -9,41 +9,75 @@ if (!isset($_SESSION['usuario'])) {
 
 $mensagem = '';
 $erro = '';
+$materia_editar = null;
 
 // Busca professores
 $query_prof = "SELECT id_professor, nome FROM Professores ORDER BY nome";
 $resultado_prof = mysqli_query($conexao, $query_prof);
 $professores = mysqli_fetch_all($resultado_prof, MYSQLI_ASSOC);
 
+// Verifica se é edição
+if (isset($_GET['editar'])) {
+    $id_editar = $_GET['editar'];
+    $query_ed = "SELECT * FROM Disciplinas WHERE id_disciplina = ?";
+    $stmt_ed = mysqli_prepare($conexao, $query_ed);
+    mysqli_stmt_bind_param($stmt_ed, "i", $id_editar);
+    mysqli_stmt_execute($stmt_ed);
+    $materia_editar = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt_ed));
+}
+
+// Exclui matéria
+if (isset($_GET['excluir'])) {
+    $id_excluir = $_GET['excluir'];
+    $query_del = "DELETE FROM Disciplinas WHERE id_disciplina = ?";
+    $stmt_del = mysqli_prepare($conexao, $query_del);
+    mysqli_stmt_bind_param($stmt_del, "i", $id_excluir);
+    if (mysqli_stmt_execute($stmt_del)) {
+        $mensagem = "Matéria removida com sucesso!";
+    } else {
+        $erro = "Erro ao remover matéria. Ela pode estar vinculada a horários!";
+    }
+}
+
+// Cadastra ou edita matéria
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nome = $_POST['materia'] ?? '';
+    $id_disciplina = $_POST['id_disciplina'] ?? null;
+
+    if ($nome) {
+        if ($id_disciplina) {
+            // Editar
+            $query = "UPDATE Disciplinas SET nome_disciplina=? WHERE id_disciplina=?";
+            $stmt = mysqli_prepare($conexao, $query);
+            mysqli_stmt_bind_param($stmt, "si", $nome, $id_disciplina);
+            $acao = "atualizada";
+        } else {
+            // Cadastrar
+            $query = "INSERT INTO Disciplinas (nome_disciplina, id_curso, carga_horaria) VALUES (?, 1, 60)";
+            $stmt = mysqli_prepare($conexao, $query);
+            mysqli_stmt_bind_param($stmt, "s", $nome);
+            $acao = "cadastrada";
+        }
+
+        if (mysqli_stmt_execute($stmt)) {
+            $mensagem = "Matéria $acao com sucesso!";
+            $materia_editar = null;
+        } else {
+            $erro = "Erro ao salvar matéria.";
+        }
+    } else {
+        $erro = "Preencha o nome da matéria!";
+    }
+}
+
 // Busca matérias cadastradas
-$query_mat = "SELECT d.nome_disciplina, p.nome AS professor
+$query_mat = "SELECT d.id_disciplina, d.nome_disciplina, p.nome AS professor
               FROM Disciplinas d
               LEFT JOIN Horarios h ON h.id_disciplina = d.id_disciplina
               LEFT JOIN Professores p ON h.id_professor = p.id_professor
               ORDER BY d.nome_disciplina";
 $resultado_mat = mysqli_query($conexao, $query_mat);
 $materias = mysqli_fetch_all($resultado_mat, MYSQLI_ASSOC);
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nome = $_POST['materia'] ?? '';
-    $id_professor = $_POST['professor'] ?? null;
-
-    if ($nome) {
-        $query = "INSERT INTO Disciplinas (nome_disciplina, id_curso, carga_horaria) VALUES (?, 1, 60)";
-        $stmt = mysqli_prepare($conexao, $query);
-        mysqli_stmt_bind_param($stmt, "s", $nome);
-
-        if (mysqli_stmt_execute($stmt)) {
-            $mensagem = "Matéria cadastrada com sucesso!";
-            $resultado_mat = mysqli_query($conexao, $query_mat);
-            $materias = mysqli_fetch_all($resultado_mat, MYSQLI_ASSOC);
-        } else {
-            $erro = "Erro ao cadastrar matéria.";
-        }
-    } else {
-        $erro = "Preencha o nome da matéria!";
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -74,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="main-content">
             <h1>Cadastros</h1>
             <div class="detalhes-card">
-                <h2>Cadastrar Matéria</h2>
+                <h2><?= $materia_editar ? 'Editar Matéria' : 'Cadastrar Matéria' ?></h2>
 
                 <?php if ($mensagem): ?>
                     <p class="msg-sucesso"><?= $mensagem ?></p>
@@ -84,24 +118,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php endif; ?>
 
                 <div class="reserva-form">
+                    <?php if ($materia_editar): ?>
+                    <input type="hidden" id="id_disciplina" value="<?= $materia_editar['id_disciplina'] ?>">
+                    <?php endif; ?>
+
                     <div class="detalhe-item">
                         <div class="detalhe-label">Matéria</div>
-                        <input type="text" name="materia" id="materia" 
-                               placeholder="Nome da Matéria" class="input-reserva">
+                        <input type="text" id="materia" placeholder="Nome da Matéria"
+                               class="input-reserva"
+                               value="<?= $materia_editar['nome_disciplina'] ?? '' ?>">
                     </div>
                     <div class="detalhe-item">
                         <div class="detalhe-label">Professor</div>
-                        <select name="professor" id="professor" class="input-reserva">
+                        <select id="professor" class="input-reserva">
                             <option value="">Selecione o professor</option>
                             <?php foreach ($professores as $prof): ?>
                             <option value="<?= $prof['id_professor'] ?>"><?= $prof['nome'] ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <button onclick="cadastrar()" class="btn-reservar">Cadastrar</button>
+                    <div style="display:flex; gap:10px;">
+                        <button onclick="salvar()" class="btn-reservar">
+                            <?= $materia_editar ? 'Salvar alterações' : 'Cadastrar' ?>
+                        </button>
+                        <?php if ($materia_editar): ?>
+                        <a href="cadastro_materia.php" class="btn-cancelar">Cancelar</a>
+                        <?php endif; ?>
+                    </div>
                 </div>
 
-                <!-- Lista de matérias cadastradas -->
+                <!-- Lista de matérias -->
                 <?php if (!empty($materias)): ?>
                 <h3 style="margin-top:25px; color:#1a3a6b;">Matérias cadastradas</h3>
                 <table class="tabela-horarios" style="margin-top:10px;">
@@ -109,6 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <tr>
                             <th>Matéria</th>
                             <th>Professor</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -116,6 +163,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <tr>
                             <td><?= $mat['nome_disciplina'] ?></td>
                             <td><?= $mat['professor'] ?? '-' ?></td>
+                            <td>
+                                <a href="cadastro_materia.php?editar=<?= $mat['id_disciplina'] ?>"
+                                   class="btn-acao btn-editar">Editar</a>
+                                <a href="cadastro_materia.php?excluir=<?= $mat['id_disciplina'] ?>"
+                                   class="btn-acao btn-excluir"
+                                   onclick="return confirm('Deseja remover esta matéria?')">Excluir</a>
+                            </td>
                         </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -129,8 +183,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <script>
-        function cadastrar() {
+        function salvar() {
             const materia = document.getElementById('materia').value;
+            const professor = document.getElementById('professor').value;
+            const id_disciplina = document.getElementById('id_disciplina')?.value ?? '';
 
             if (!materia) {
                 alert('Preencha o nome da matéria!');
@@ -141,11 +197,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             form.method = 'POST';
             form.action = 'cadastro_materia.php';
 
-            const campos = {
-                materia,
-                professor: document.getElementById('professor').value
-            };
-
+            const campos = { materia, professor, id_disciplina };
             for (const [key, value] of Object.entries(campos)) {
                 const input = document.createElement('input');
                 input.type = 'hidden';

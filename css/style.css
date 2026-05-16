@@ -322,3 +322,45 @@ body {
     background-color: #1a3a6b;
     color: white;
 }
+
+/* AÇÕES DA TABELA */
+.btn-acao {
+    padding: 5px 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.btn-editar {
+    background-color: #1a3a6b;
+    color: white;
+}
+
+.btn-editar:hover {
+    background-color: #f97316;
+}
+
+.btn-excluir {
+    background-color: #dc2626;
+    color: white;
+}
+
+.btn-excluir:hover {
+    background-color: #b91c1c;
+}
+
+.btn-cancelar {
+    background-color: #6b7280;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    text-align: center;
+}
+
+.btn-cancelar:hover {
+    background-color: #4b5563;
+}

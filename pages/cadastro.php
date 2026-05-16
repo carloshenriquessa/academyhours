@@ -6,6 +6,12 @@ if (!isset($_SESSION['usuario'])) {
     header('Location: ../index.php');
     exit;
 }
+
+// Restrição de acesso - apenas admin
+if ($_SESSION['tipo'] != 2) {
+    header('Location: dashboard.php');
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -26,8 +32,12 @@ if (!isset($_SESSION['usuario'])) {
             <nav>
                 <a href="dashboard.php">Visualizar horários</a>
                 <a href="cursos.php">Meus cursos</a>
+                <?php if ($_SESSION['tipo'] == 2): ?>
                 <a href="reserva.php">Reservar Salas</a>
+                <?php endif; ?>
+                <?php if ($_SESSION['tipo'] == 2): ?>
                 <a href="cadastro.php" class="active">Cadastros</a>
+                <?php endif; ?>
                 <a href="../includes/logout.php">Sair</a>
             </nav>
         </div>
