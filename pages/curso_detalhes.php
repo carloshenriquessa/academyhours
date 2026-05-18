@@ -42,7 +42,7 @@ $nome_disciplina = $dados[0]['nome_disciplina'] ?? 'Disciplina';
             <nav>
                 <a href="dashboard.php">Visualizar horários</a>
                 <a href="cursos.php" class="active">Meus cursos</a>
-                <?php if ($_SESSION['tipo'] == 2): ?>
+                <?php if ($_SESSION['tipo'] == 2 || $_SESSION['tipo'] == 3): ?>
                 <a href="reserva.php">Reservar Salas</a>
                 <?php endif; ?>
                 <?php if ($_SESSION['tipo'] == 2): ?>

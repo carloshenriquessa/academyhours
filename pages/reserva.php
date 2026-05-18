@@ -7,8 +7,8 @@ if (!isset($_SESSION['usuario'])) {
     exit;
 }
 
-// Restrição de acesso - apenas admin
-if ($_SESSION['tipo'] != 2) {
+// Restrição de acesso - admin e professor
+if ($_SESSION['tipo'] != 2 && $_SESSION['tipo'] != 3) {
     header('Location: dashboard.php');
     exit;
 }
@@ -41,7 +41,7 @@ $salas = [
             <nav>
                 <a href="dashboard.php">Visualizar horários</a>
                 <a href="cursos.php">Meus cursos</a>
-                <?php if ($_SESSION['tipo'] == 2): ?>
+                <?php if ($_SESSION['tipo'] == 2 || $_SESSION['tipo'] == 3): ?>
                 <a href="reserva.php" class="active">Reservar Salas</a>
                 <?php endif; ?>
                 <?php if ($_SESSION['tipo'] == 2): ?>

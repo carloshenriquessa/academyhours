@@ -105,7 +105,7 @@ $professores = mysqli_fetch_all($resultado_prof, MYSQLI_ASSOC);
             <nav>
                 <a href="dashboard.php">Visualizar horários</a>
                 <a href="cursos.php">Meus cursos</a>
-                <?php if ($_SESSION['tipo'] == 2): ?>
+                <?php if ($_SESSION['tipo'] == 2 || $_SESSION['tipo'] == 3): ?>
                 <a href="reserva.php">Reservar Salas</a>
                 <?php endif; ?>
                 <?php if ($_SESSION['tipo'] == 2): ?>

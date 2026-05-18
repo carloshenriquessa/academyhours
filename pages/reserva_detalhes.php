@@ -7,8 +7,8 @@ if (!isset($_SESSION['usuario'])) {
     exit;
 }
 
-// Restrição de acesso - apenas admin
-if ($_SESSION['tipo'] != 2) {
+// Restrição de acesso - admin e professor
+if ($_SESSION['tipo'] != 2 && $_SESSION['tipo'] != 3) {
     header('Location: dashboard.php');
     exit;
 }
@@ -68,7 +68,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 if (mysqli_stmt_execute($stmt_i)) {
                     $mensagem = "Sala reservada com sucesso!";
-                    // Atualiza lista de reservas
                     mysqli_stmt_execute($stmt_res);
                     $resultado_reservas = mysqli_stmt_get_result($stmt_res);
                     $reservas = mysqli_fetch_all($resultado_reservas, MYSQLI_ASSOC);
@@ -101,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <nav>
                 <a href="dashboard.php">Visualizar horários</a>
                 <a href="cursos.php">Meus cursos</a>
-                <?php if ($_SESSION['tipo'] == 2): ?>
+                <?php if ($_SESSION['tipo'] == 2 || $_SESSION['tipo'] == 3): ?>
                 <a href="reserva.php" class="active">Reservar Salas</a>
                 <?php endif; ?>
                 <?php if ($_SESSION['tipo'] == 2): ?>
