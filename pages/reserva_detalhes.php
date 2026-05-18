@@ -34,7 +34,6 @@ mysqli_stmt_execute($stmt_res);
 $resultado_reservas = mysqli_stmt_get_result($stmt_res);
 $reservas = mysqli_fetch_all($resultado_reservas, MYSQLI_ASSOC);
 
-$dias = ['Segunda-Feira', 'Terça-Feira', 'Quarta-Feira', 'Quinta-Feira', 'Sexta-Feira', 'Sábado'];
 $horarios = ['07:00', '08:00', '09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00', '19:00', '20:00', '21:00'];
 
 // Salva reserva no banco
@@ -134,13 +133,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </select>
                     </div>
                     <div class="detalhe-item">
-                        <div class="detalhe-label">Dia</div>
-                        <select name="dia" id="dia" class="input-reserva">
-                            <option value="">Selecione o dia</option>
-                            <?php foreach ($dias as $dia): ?>
-                            <option value="<?= $dia ?>"><?= $dia ?></option>
-                            <?php endforeach; ?>
-                        </select>
+                        <div class="detalhe-label">Data</div>
+                        <input type="date" id="data" class="input-reserva"
+                               min="<?= date('Y-m-d') ?>"
+                               onchange="atualizarDia(this.value)">
+                        <input type="hidden" name="dia" id="dia_semana">
                     </div>
                     <div class="detalhe-item">
                         <div class="detalhe-label">Início</div>
@@ -195,13 +192,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <script>
+        function atualizarDia(valor) {
+            const dias = ['Domingo', 'Segunda-Feira', 'Terça-Feira', 'Quarta-Feira', 'Quinta-Feira', 'Sexta-Feira', 'Sábado'];
+            const data = new Date(valor + 'T00:00:00');
+            const nomeDia = dias[data.getDay()];
+            document.getElementById('dia_semana').value = nomeDia;
+        }
+
         function reservar() {
             const professor = document.getElementById('professor').value;
-            const dia = document.getElementById('dia').value;
+            const dia = document.getElementById('dia_semana').value;
+            const data = document.getElementById('data').value;
             const inicio = document.getElementById('hora_inicio').value;
             const fim = document.getElementById('hora_fim').value;
 
-            if (!professor || !dia || !inicio || !fim) {
+            if (!professor || !data || !inicio || !fim) {
                 alert('Preencha todos os campos!');
                 return;
             }
@@ -216,7 +221,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             form.action = 'reserva_detalhes.php?nome=<?= urlencode($nome_sala) ?>';
 
             const campos = {
-                professor, dia,
+                professor,
+                dia: dia,
                 hora_inicio: inicio,
                 hora_fim: fim,
                 nome_sala: '<?= $nome_sala ?>'

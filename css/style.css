@@ -8,38 +8,47 @@
 body {
     background-color: #f0f0f0;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
+/* LOGIN */
 .login-container {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
+    min-height: 100vh;
+    padding: 20px;
 }
 
 .login-box {
     background-color: #1a3a6b;
     padding: 40px;
     border-radius: 10px;
-    width: 350px;
+    width: 100%;
+    max-width: 380px;
     display: flex;
     flex-direction: column;
     gap: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
 }
 
 .login-box h1 {
     color: #f97316;
     text-align: center;
     font-size: 28px;
+    margin-bottom: 5px;
 }
 
 .login-box input[type="text"],
 .login-box input[type="password"] {
-    padding: 10px;
+    padding: 12px;
     border: none;
     border-radius: 5px;
     font-size: 14px;
     width: 100%;
+    outline: none;
 }
 
 .login-box label {
@@ -59,6 +68,7 @@ body {
     font-size: 16px;
     cursor: pointer;
     width: 100%;
+    transition: background 0.2s;
 }
 
 .login-box button:hover {
@@ -83,13 +93,7 @@ body {
     top: 0;
     left: 0;
     bottom: 0;
-}
-
-.main-content {
-    flex: 1;
-    padding: 30px;
-    background-color: #f0f0f0;
-    margin-left: 180px;
+    z-index: 100;
 }
 
 .sidebar-logo {
@@ -127,6 +131,8 @@ body {
     flex: 1;
     padding: 30px;
     background-color: #f0f0f0;
+    margin-left: 180px;
+    min-height: 100vh;
 }
 
 .main-content h1 {
@@ -135,6 +141,7 @@ body {
     font-size: 28px;
 }
 
+/* TABELA */
 .tabela-horarios {
     width: 100%;
     border-collapse: collapse;
@@ -167,7 +174,7 @@ body {
 /* CURSOS */
 .cursos-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 15px;
     margin-top: 10px;
 }
@@ -199,6 +206,7 @@ body {
     padding: 30px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     max-width: 600px;
+    width: 100%;
 }
 
 .detalhes-card h2 {
@@ -211,6 +219,7 @@ body {
     display: flex;
     margin-bottom: 12px;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 .detalhe-label {
@@ -231,6 +240,7 @@ body {
     border-radius: 5px;
     font-size: 13px;
     flex: 1;
+    min-width: 150px;
 }
 
 .btn-voltar {
@@ -267,6 +277,7 @@ body {
     border-radius: 5px;
     font-size: 13px;
     outline: none;
+    min-width: 150px;
 }
 
 .btn-reservar {
@@ -279,6 +290,8 @@ body {
     cursor: pointer;
     margin-top: 10px;
     transition: background 0.2s;
+    width: fit-content;
+    min-width: 150px;
 }
 
 .btn-reservar:hover {
@@ -289,12 +302,20 @@ body {
     color: green;
     font-weight: bold;
     margin-bottom: 15px;
+    padding: 10px;
+    background-color: #f0fff0;
+    border-radius: 5px;
+    border: 1px solid green;
 }
 
 .msg-erro {
     color: red;
     font-weight: bold;
     margin-bottom: 15px;
+    padding: 10px;
+    background-color: #fff0f0;
+    border-radius: 5px;
+    border: 1px solid red;
 }
 
 /* CADASTROS */
@@ -331,6 +352,7 @@ body {
     font-size: 12px;
     font-weight: bold;
     margin-right: 5px;
+    display: inline-block;
 }
 
 .btn-editar {
@@ -359,8 +381,55 @@ body {
     text-decoration: none;
     font-size: 14px;
     text-align: center;
+    display: inline-block;
 }
 
 .btn-cancelar:hover {
     background-color: #4b5563;
+}
+
+/* RESPONSIVO */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        min-height: auto;
+        position: relative;
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: 10px;
+    }
+
+    .sidebar nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-top: 0;
+    }
+
+    .sidebar nav a {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 15px;
+    }
+
+    .cursos-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+
+    .detalhes-card {
+        padding: 15px;
+    }
+
+    .tabela-horarios th,
+    .tabela-horarios td {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+    .login-box {
+        padding: 25px;
+    }
 }

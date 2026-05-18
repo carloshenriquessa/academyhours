@@ -7,7 +7,7 @@
     <title>AcademyHours - Login</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body style="display:flex; justify-content:center; align-items:center; min-height:100vh; margin:0; background-color:#f0f0f0;">>
     <div class="login-container">
         <div class="login-box">
             <h1>AcademyHours</h1>
